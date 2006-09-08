@@ -1,0 +1,31 @@
+\ProvidesPackageRCS $Header$
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+\definecolor{cebitec}{rgb}{0,.6,.2}
+\definecolor{highlight}{rgb}{0,.5,1}
+
+\usecolortheme[named=cebitec]{structure}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=highlight}
+\setbeamercolor{date}{fg=cebitec}
+
+\useoutertheme[footline=authortitle,subsection=false]{miniframes}
+\useoutertheme[subsection=false]{smoothbars}
+\useinnertheme[shadow=true]{rounded}
+\usecolortheme{rose}
+\usecolortheme{whale}
+
+\setbeamerfont{block title}{size={}}
+
+%% remove navigation icons
+\setbeamertemplate{navigation symbols}{}
+
+\mode
+<all>
