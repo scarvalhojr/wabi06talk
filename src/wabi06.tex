@@ -149,11 +149,37 @@ Graduiertenkolleg Bioinformatik
 
 }
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[label=problem]{\frametitle{Problem: Unintended Illumination}
 
-  \begin{block}{Border Length Minimization Problem}
+  \begin{columns}
+  
+    \begin{column}{0.45\textwidth}
+      \centerline{
+        \includegraphics[width=\textwidth]{pics/straylight.jpg}
+      }
+    \end{column}
+    
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item \alert{Untargeted spots} can be accidentally activated
+        \begin{itemize}
+          \item Diffraction of light
+          \item Internal reflection
+        \end{itemize}
+        \item Production of defective probes
+        \item More likely near the \alert{borders} between masked and unmasked
+              spots: \alert{border conflict}
+      \end{itemize}
+    \end{column}
+    
+  \end{columns}
+  
+  \begin{block}{Border Length Minimization Problem (Hannenhalli et al., 2002)}
+    \begin{itemize}
+      \item Find arrangement (and embeddings) with minimum number of border
+            conflicts
+    \end{itemize}
   \end{block}
 
 }
@@ -164,7 +190,137 @@ Graduiertenkolleg Bioinformatik
 %% *****************************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Motivation}
+\frame{\frametitle{Conflict Index: Motivation}
+
+  \begin{itemize}
+    \item Border Length measures the quality of a particular mask
+    \begin{itemize}
+      \item We are more interested in a \alert{per-probe} measure
+    \end{itemize}
+    \item Practical considerations need to be taken into account:
+    \begin{itemize}
+      \item[a)] Stray light might activate probes that are as far as \alert{three
+                cells away} from the targeted spot
+      \item[b)] Imperfections produced \alert{in the middle} of a probe are more
+                harmful than in its extremities
+    \end{itemize}
+  \end{itemize}
+  
+  \begin{block}{Conflict Index of a probe $p$}
+    \footnotesize{
+    \[
+    \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr),
+    \]
+    where $\delta(p,p',t)$ are \alert{distance-dependent} weights (a) and
+    $\omega(p,t)$ are \alert{position-dependent} weights (b) defined as follows.
+    }
+  \end{block}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Conflict Index: Definition}
+
+  \begin{columns}
+  
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Conflict Index of a probe $p$}
+        \footnotesize{
+        \[
+        \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr)
+        \]
+        }
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \begin{figure}
+        \centerline{
+        \begin{picture}(165,55)
+        %% \put(0,0){\framebox(165,55){}}
+        \put(-5,0){\makebox(165,55){
+        \begin{minipage}{160pt}
+        \centerline{
+        \tiny{
+        \begin{tabular}{|c|c|c|c|c|c|c|c|} \hline
+        0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
+        0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
+        0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
+        0.11 & 0.25 & 1.00 & \alert{$p$} & 1.00 & 0.25 & 0.11 \\ \hline
+        0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
+        0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
+        0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
+        \end{tabular}}}
+        \end{minipage}}}
+        \end{picture}}
+      \end{figure}
+    \end{column}
+    
+  \end{columns}
+  
+  \begin{block}{a) Distance-dependent weights $\delta(p,p',t)$}
+    \footnotesize{
+    \[
+    \delta(p,p',t) :=
+    \left\{
+    \begin{array}{ll}
+    (d(p,p'))^{-2} & \mbox{if $p'$ is unmasked at step $t$}, \\
+                 0 & \mbox{otherwise}, \\
+    \end{array}
+    \right.
+    \]
+    %%
+    where $d(p,p')$ is the Euclidean distance between the spots of~$p$ and~$p'$.
+    }
+  \end{block}
+  
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Conflict Index: Definition}
+
+  \begin{columns}
+  
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Conflict Index of a probe $p$}
+        \footnotesize{
+        \[
+        \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr)
+        \]
+        }
+      \end{block}
+    \end{column}
+    
+    \begin{column}{0.45\textwidth}
+      \centerline{
+        \includegraphics[width=1.25\textwidth]{pics/position_weights.png}
+      }
+    \end{column}
+    
+  \end{columns}
+
+  \begin{block}{b) Position-dependent weights $\omega(p,t)$}
+    \footnotesize{
+    \[
+    \omega(p,t) :=
+    \left\{
+    \begin{array}{ll}
+    c \cdot \exp{\left(\theta \cdot \lambda(p,t)\right)} & \mbox{if $p$ is masked at step $t$}, \\
+    0 & \mbox{otherwise}, \\
+    \end{array}
+    \right.
+    \]
+    %%
+    where $c>0$ and $\theta>0$ are constants,
+    %%
+    \[
+    \lambda(p,t) := 1 + \min(b_{p,t},\ell_{p} - b_{p,t}),
+    \]
+    %%
+    $b_{p,t}$ denotes the number of nucleotides synthesized up to and
+    including step~$t$, and $\ell_{p}$ is the length of probe~$p$.
+    }
+  \end{block}
+
 }
 
 %% *****************************************************************************
