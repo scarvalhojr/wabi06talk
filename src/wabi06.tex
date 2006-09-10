@@ -85,9 +85,9 @@ Graduiertenkolleg Bioinformatik
 
   \vspace*{0.4cm}
   \centerline{
-    \includegraphics[height=1.4cm]{aggi_logo.png}
+    \includegraphics[height=1.4cm]{pics/aggi_logo.png}
     \hspace*{0.6cm}
-    \includegraphics[height=1.4cm]{gsbg_logo.png}
+    \includegraphics[height=1.4cm]{pics/gsbg_logo.png}
   }
   
   \titlepage
@@ -108,7 +108,7 @@ Graduiertenkolleg Bioinformatik
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[label=oligoarray]{\frametitle{High-Density Oligonucleotide Microarrays}
 
-  \centerline{\includegraphics[height=0.9\textheight]{oligoarray.jpg}}
+  \centerline{\includegraphics[height=0.9\textheight]{pics/oligoarray.jpg}}
   \vspace*{-0.5cm}
   \centerline{\tiny{Source: Affymetrix, Inc.}}
 
@@ -119,7 +119,7 @@ Graduiertenkolleg Bioinformatik
 
   \vspace*{-0.5cm}
   \flushright{\tiny{Source: Affymetrix, Inc.}}
-  \centerline{\includegraphics[height=0.5\textheight]{photolitography.jpg}}  
+  \centerline{\includegraphics[height=0.5\textheight]{pics/photolithography.jpg}}  
 
   \begin{itemize}
     \item Probes are synthesized on the chip in a series of \alert{steps}
@@ -329,7 +329,81 @@ Graduiertenkolleg Bioinformatik
 %% *****************************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Previous work}
+\frame{\frametitle{Previous Work: Place and Re-embed}
+
+  \begin{itemize}
+    \item The microarray layout problem has been traditionally approached in two
+          phases:
+    \begin{itemize}
+      \item[1)] \alert{Placement} of probes given a fixed embedding
+      \item[2)] \alert{Re-embedding} of probes given a fixed placement
+    \end{itemize}
+  \end{itemize}
+  
+  \begin{block}{Placement: Row-epitaxial (Kahng {\it et~al}., 2003)}
+    \begin{itemize}
+      \item Essentially \alert{greedy}
+      \item Spots are filled in a pre-defined order
+      \begin{itemize}
+        \item Select probe from a list $Q$ such that conflicts with filled spots
+              are minimized
+      \end{itemize}
+      \item Restrict the maximum size of $Q$
+    \end{itemize}
+  \end{block}
+  
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Previous Work: Place and Re-embed}
+
+  \begin{block}{Re-embedding: several algorithms}
+    \begin{itemize}
+      \item All based on the Optimum Single Probe Embedding (OSPE)
+      \item OSPE re-embed a probe \alert{optimally} in regards to its neighbors
+      \item Difference is in the order in which re-embeddings take place
+    \end{itemize}
+  \end{block}
+
+  \begin{columns}
+  
+    \begin{column}{0.5\textwidth}
+      \centerline{
+        \includegraphics[width=0.7\textwidth]{pics/ospe.jpg}
+      }
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+      \begin{block}{Optimum Single Probe Embedding (OSPE)}
+        \begin{itemize}
+          \item Dynamic Programming
+          \item Originally developed for border length minimization
+          \item Now extended for conflict index minimization
+        \end{itemize}
+      \end{block}
+    \end{column}
+  
+  \end{columns}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Previous Work: Partitioning}
+
+  More recently, a \alert{partitioning algorithm} was proposed
+  \begin{itemize}
+    \item Divide the problem into smaller sub-problems
+    \item Each sub-problem is treated as a separate placement
+    \item Reduce run-time; \alert{may} improve placement
+  \end{itemize}
+
+  \begin{block}{Partitioning: Centroid-based Quadrisection (Kahng {\it et~al}.,
+    2003)}
+    \begin{itemize}
+      \item To do...
+    \end{itemize}
+  \end{block}
+
 }
 
 %% *****************************************************************************
@@ -339,15 +413,36 @@ Graduiertenkolleg Bioinformatik
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Summary}
+
+  \begin{itemize}
+    \item \alert{Conflict Index}: new model for evaluating microarray layouts
+    \item \alert{Pivot Partitioning}: new partitioning algorithm
+    \begin{itemize}
+      \item Faster and better selection of pivots
+      \item Improved assignment of probes to regions
+      \item First to combine placement and re-embedding
+    \end{itemize}
+    
+    \vskip0pt plus.5fill
+
+    \ignore{    
+    \item Future work
+    \begin{itemize}
+      \item Implement ``borrowing heuristic''
+    \end{itemize}
+    }
+    
+  \end{itemize}
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Thanks!}
 
   \centerline{
-    \includegraphics[height=1.4cm]{aggi_logo.png}
+    \includegraphics[height=1.4cm]{pics/aggi_logo.png}
     \hspace*{0.6cm}
-    \includegraphics[height=1.4cm]{gsbg_logo.png}
+    \includegraphics[height=1.4cm]{pics/gsbg_logo.png}
   }
 
   \begin{itemize}
@@ -360,7 +455,14 @@ Graduiertenkolleg Bioinformatik
     \vskip0pt plus.5fill
     
     \item ...and \alert{thank you} for your attention!
+    
   \end{itemize}
+  
+  \begin{block}{More info on}
+    \centerline{\tt\alert{
+      http://gi.cebitec.uni-bielefeld.de/assb/chiplayout
+    }}
+  \end{block}
   
 \end{frame}
 
