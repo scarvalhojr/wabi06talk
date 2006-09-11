@@ -19,7 +19,7 @@
 
 \newcommand{\ignore}[1]{}
 
-\title[Improving Microarray Layout: Pivot Partitioning] % (optional, use only with long paper titles)
+\title[WABI 2006 - Improving Microarray Layout: Pivot Partitioning] % (optional, use only with long paper titles)
 {Improving the Layout of Oligonucleotide Microarrays: Pivot Partitioning}
 
 %% \subtitle
@@ -47,7 +47,7 @@ Graduiertenkolleg Bioinformatik
 % - Keep it simple, no one is interested in your street address.
 
 \date[WABI 2006] % (optional, should be abbreviation of conference name)
-{6th Workshop on Algorithms in Bioinformatics\\Z\"urich, Sep 2006}
+{Workshop on Algorithms in Bioinformatics, 2006}
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -85,9 +85,9 @@ Graduiertenkolleg Bioinformatik
 
   \vspace*{0.4cm}
   \centerline{
-    \includegraphics[height=1.4cm]{pics/aggi_logo.png}
+    \includegraphics[height=1.3cm]{pics/aggi_logo.png}
     \hspace*{0.6cm}
-    \includegraphics[height=1.4cm]{pics/gsbg_logo.png}
+    \includegraphics[height=1.3cm]{pics/gsbg_logo.png}
   }
   
   \titlepage
@@ -101,7 +101,7 @@ Graduiertenkolleg Bioinformatik
 }
 
 %% *****************************************************************************
-\section[Introduction]{Introduction: Microarray Layout}
+\section[Introduction]{Introduction to Microarray Layout}
 \subsection{Dummy}
 %% *****************************************************************************
 
@@ -115,42 +115,44 @@ Graduiertenkolleg Bioinformatik
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame[label=probesyn]{\frametitle{Probe Synthesis: Photolitographic Masks}
+\frame[label=probesyn]{\frametitle{Probe Synthesis with Photolitographic Masks}
 
   \vspace*{-0.5cm}
   \flushright{\tiny{Source: Affymetrix, Inc.}}
   \centerline{\includegraphics[height=0.5\textheight]{pics/photolithography.jpg}}  
 
   \begin{itemize}
-    \item Probes are synthesized on the chip in a series of \alert{steps}
-    \item Each step appends a particular nucleotide to \alert{selected regions}
-    \item Selection occurs by exposure to light
+    \item Probes are synthesized on the chip in a \alert{series of steps}
+    \item Each step \alert{appends a particular nucleotide} to selected regions
+    \item Selection occurs by exposure to light directed by a \alert{mask}
   \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[label=embed]{\frametitle{Deposition Sequence and Probe Embeddings}
 
-  \vspace*{1cm}
-  \centerline{
-  \includegraphics<+>[width=\textwidth]{masks/chip.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/mask1.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/mask2.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/mask3.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/mask4.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/embed.jpg}
-  \includegraphics<+>[width=\textwidth]{masks/leftmost.jpg}
-  \includegraphics<+->[width=\textwidth]{masks/binary.jpg}
-  }
-  \onslide+<7>{
-    \hspace{7cm}
-    \alert{Left-most embedding!}
-  }
+  %%\vspace*{1cm}
+  \begin{overprint}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/chip.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/mask1.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/mask2.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/mask3.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/mask4.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/embed.jpg}
+  \onslide<+>
+    \includegraphics[width=\textwidth]{masks/alternatives.jpg}
+  \end{overprint}
 
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame[label=problem]{\frametitle{Problem: Unintended Illumination}
+\frame[label=problem]{\frametitle{Unintended Illumination Problem}
 
   \begin{columns}
   
@@ -185,79 +187,55 @@ Graduiertenkolleg Bioinformatik
 }
 
 %% *****************************************************************************
-\section[Conflict Index]{Conflict Index Evaluation Model}
+\section[Conflict Index]{Conflict Index Model}
 \subsection{Dummy}
 %% *****************************************************************************
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Conflict Index: Motivation}
+\frame{\frametitle{Motivation}
 
-  \begin{itemize}
-    \item Border Length measures the quality of a particular mask
-    \begin{itemize}
-      \item We are more interested in a \alert{per-probe} measure
-    \end{itemize}
-    \item Practical considerations need to be taken into account:
-    \begin{itemize}
-      \item[a)] Stray light might activate probes that are as far as \alert{three
-                cells away} from the targeted spot
-      \item[b)] Imperfections produced \alert{in the middle} of a probe are more
-                harmful than in its extremities
-    \end{itemize}
-  \end{itemize}
+  \begin{columns}  
   
-  \begin{block}{Conflict Index of a probe $p$}
-    \footnotesize{
-    \[
-    \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr),
-    \]
-    where $\delta(p,p',t)$ are \alert{distance-dependent} weights (a) and
-    $\omega(p,t)$ are \alert{position-dependent} weights (b) defined as follows.
-    }
-  \end{block}
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Border Length measures the quality of a particular mask
+        \begin{itemize}
+          \item We are more interested in a \alert{per-probe measure}
+        \end{itemize}
+        \item Practical considerations need to be taken into account:
+        \begin{itemize}
+          \item[a)] Stray light might damage probes that lie as far as \alert{three
+                    cells away} from the targeted spot
+          \item[b)] Imperfections produced \alert{in the middle} of a probe are more
+                    harmful than in its extremities
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+      
+    \begin{column}{0.45\textwidth}
+      \centerline{
+        \includegraphics[width=\textwidth]{pics/distance.jpg}
+      }
+    \end{column}
+  
+  \end{columns}
+  
+  \vspace*{0.35cm}
+  \includegraphics[width=\textwidth]{pics/position.jpg}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Conflict Index: Definition}
+\frame{\frametitle{Definition}
 
-  \begin{columns}
-  
-    \begin{column}{0.45\textwidth}
-      \begin{block}{Conflict Index of a probe $p$}
-        \footnotesize{
-        \[
-        \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr)
-        \]
-        }
-      \end{block}
-    \end{column}
+  \begin{block}{Conflict Index of a probe $p$}
+    \footnotesize{
+    \[
+    \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr)
+    \]
+    }
+  \end{block}
     
-    \begin{column}{0.45\textwidth}
-      \begin{figure}
-        \centerline{
-        \begin{picture}(165,55)
-        %% \put(0,0){\framebox(165,55){}}
-        \put(-5,0){\makebox(165,55){
-        \begin{minipage}{160pt}
-        \centerline{
-        \tiny{
-        \begin{tabular}{|c|c|c|c|c|c|c|c|} \hline
-        0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
-        0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
-        0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
-        0.11 & 0.25 & 1.00 & \alert{$p$} & 1.00 & 0.25 & 0.11 \\ \hline
-        0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
-        0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
-        0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
-        \end{tabular}}}
-        \end{minipage}}}
-        \end{picture}}
-      \end{figure}
-    \end{column}
-    
-  \end{columns}
-  
-  \begin{block}{a) Distance-dependent weights $\delta(p,p',t)$}
+  \begin{block}{Distance-dependent weights}
     \footnotesize{
     \[
     \delta(p,p',t) :=
@@ -269,14 +247,29 @@ Graduiertenkolleg Bioinformatik
     \right.
     \]
     %%
-    where $d(p,p')$ is the Euclidean distance between the spots of~$p$ and~$p'$.
+    where $d(p,p')$ is the \alert{Euclidean distance} between the spots of~$p$
+    and~$p'$.
     }
   \end{block}
+
+  \vspace*{0.2cm}
+
+  \centerline{
+  \scriptsize{
+  \begin{tabular}{|c|c|c|c|c|c|c|c|} \hline
+  0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
+  0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
+  0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
+  0.11 & 0.25 & 1.00 & \alert{$p$} & 1.00 & 0.25 & 0.11 \\ \hline
+  0.10 & 0.20 & 0.50 & 1.00 & 0.50 & 0.20 & 0.10 \\ \hline
+  0.08 & 0.13 & 0.20 & 0.25 & 0.20 & 0.13 & 0.08 \\ \hline
+  0.06 & 0.08 & 0.10 & 0.11 & 0.10 & 0.08 & 0.06 \\ \hline
+  \end{tabular}}}
   
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Conflict Index: Definition}
+\frame{\frametitle{Definition}
 
   \begin{columns}
   
@@ -298,7 +291,7 @@ Graduiertenkolleg Bioinformatik
     
   \end{columns}
 
-  \begin{block}{b) Position-dependent weights $\omega(p,t)$}
+  \begin{block}{Position-dependent weights}
     \footnotesize{
     \[
     \omega(p,t) :=
@@ -310,14 +303,15 @@ Graduiertenkolleg Bioinformatik
     \right.
     \]
     %%
-    where $c>0$ and $\theta>0$ are constants,
+    where
     %%
     \[
     \lambda(p,t) := 1 + \min(b_{p,t},\ell_{p} - b_{p,t}),
     \]
     %%
-    $b_{p,t}$ denotes the number of nucleotides synthesized up to and
-    including step~$t$, and $\ell_{p}$ is the length of probe~$p$.
+    $b_{p,t}$ denotes the number of nucleotides synthesized up to and including
+    step~$t$, $\ell_{p}$ is the length of probe~$p$, $c>0$ and $\theta>0$ are
+    constants.
     }
   \end{block}
 
