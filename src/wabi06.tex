@@ -131,7 +131,6 @@ Graduiertenkolleg Bioinformatik
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame[label=embed]{\frametitle{Deposition Sequence and Probe Embeddings}
 
-  %%\vspace*{1cm}
   \begin{overprint}
   \onslide<+>
     \includegraphics[width=\textwidth]{masks/chip.jpg}
@@ -330,79 +329,107 @@ Graduiertenkolleg Bioinformatik
           phases:
     \begin{itemize}
       \item[1)] \alert{Placement} of probes given a fixed embedding
-      \item[2)] \alert{Re-embedding} of probes given a fixed placement
+      \item[2)] \alert{Re-embedding} of probes once a placement is fixed
     \end{itemize}
   \end{itemize}
   
   \begin{block}{Placement: Row-epitaxial (Kahng {\it et~al}., 2003)}
     \begin{itemize}
-      \item Essentially \alert{greedy}
       \item Spots are filled in a pre-defined order
       \begin{itemize}
         \item Select probe from a list $Q$ such that conflicts with filled spots
               are minimized
       \end{itemize}
-      \item Restrict the maximum size of $Q$
+      \item Restrict the maximum size of $Q$ (e.g. $Q = 20\,000$)
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Re-embedding: several algorithms (Kahng {\it et~al}., 2002, 2003)}
+    \begin{itemize}
+      \item All based on the Optimum Single Probe Embedding (OSPE)
+      \begin{itemize}
+        \item Re-embed a probe \alert{optimally} in regards to its neighbors
+      \end{itemize}
+      \item Difference is the order in which probes are re-embedded
     \end{itemize}
   \end{block}
   
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Previous Work: Place and Re-embed}
+\frame{\frametitle{Optimum Single Probe Embedding (OSPE)}
 
-  \begin{block}{Re-embedding: several algorithms}
+  \begin{itemize}
+    \item Designed for border length minimization (Kahng {\it et~al}.,2002)
     \begin{itemize}
-      \item All based on the Optimum Single Probe Embedding (OSPE)
-      \item OSPE re-embed a probe \alert{optimally} in regards to its neighbors
-      \item Difference is in the order in which re-embeddings take place
+      \item We extended it for conflict index minimization
+    \end{itemize}
+  \end{itemize}
+
+  \begin{overprint}
+    
+    \onslide<+>
+      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe0.jpg}}
+    \onslide<+>
+      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe1.jpg}}
+    \onslide<+>
+      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe2.jpg}}
+  \end{overprint}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Partitioning}
+
+  The placement problem can be trivially \alert{partitioned}
+  \begin{itemize}
+    \item The chip is divided into sub-regions; each sub-region gets a sub-set
+          of the probes
+    \item Sub-regions are processed independently, and can be
+          \alert{recursively partitioned}
+    \item In the end, a placement algorithm is needed
+    \item Can reduce run-time and help the placement algorithm
+  \end{itemize}
+
+  \begin{block}{Partitioning: Centroid Quadrisection (Kahng {\it et~al}., 2003)}
+    \begin{itemize}
+      \item The chip is divided into \alert{four quadrants}
+      \item Four ``centroids'' are selected maximizing the Hamming distance 
+            between their embeddings
+      \item Remaining probes are compared to the centroids and are assigned to
+            the quadrant whose centroid has the minimum Hamming distance
+    \end{itemize}
+  \end{block}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{Motivation}
+
+  \begin{block}{Observation 1}
+    \begin{itemize}
+      \item The place and re-embed approach is inefficient
+      \begin{itemize}
+        \item Placement is based on embeddings that are likely to change
+      \end{itemize}
     \end{itemize}
   \end{block}
 
   \begin{columns}
   
-    \begin{column}{0.5\textwidth}
-      \centerline{
-        \includegraphics[width=0.7\textwidth]{pics/ospe.jpg}
-      }
-    \end{column}
-    
-    \begin{column}{0.5\textwidth}
-      \begin{block}{Optimum Single Probe Embedding (OSPE)}
+    \begin{column}{0.55\textwidth}
+      \begin{block}{Observation 2}
         \begin{itemize}
-          \item Dynamic Programming
-          \item Originally developed for border length minimization
-          \item We extended it for conflict index minimization
+          \item Some probes have only a few possible embeddings
+          \item Others may have up to several millions
+          \item Probes with more embeddings are more ``flexible''
+          \begin{itemize}
+            \item They can adapt better to their neighbors
+          \end{itemize}
         \end{itemize}
       \end{block}
     \end{column}
-  
-  \end{columns}
-
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Previous Work: Partitioning}
-
-  More recently, a \alert{partitioning algorithm} was proposed: Centroid-based
-  Quadrisection (Kahng {\it et~al}., 2003)
-  
-  \begin{itemize}
-    \item Recursive partitioning; the chip is divided into four quadrants
-    \item Each sub-problem is treated as a separate placement
-    \begin{itemize}
-      \item A placement algorithm is needed in the end
-    \end{itemize}
-    \item Reduce run-time; \alert{may} improve placement
-  \end{itemize}
-
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning: Motivation}
-
-  \begin{columns}
-  
+    
     \begin{column}{0.45\textwidth}
       \centerline{\footnotesize{
       \begin{tabular}{|r|r|r|}
@@ -422,25 +449,12 @@ Graduiertenkolleg Bioinformatik
       \end{tabular}}}
     \end{column}
   
-    \begin{column}{0.55\textwidth}
-      \begin{block}{Observation}
-        \begin{itemize}
-          \item Some probes have only a few possible embeddings
-          \item Others may have up to several millions
-          \item Probes with more embeddings are more ``flexible''
-          \begin{itemize}
-            \item They can adapt better to their neighbors
-          \end{itemize}
-        \end{itemize}
-      \end{block}
-    \end{column}
-    
   \end{columns}
     
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning: Pivots}
+\frame{\frametitle{Phase 1: Selecting Pivot Candidates}
 
   \begin{itemize}
     \item We use probes with fewer embeddings (\alert{pivots}) to:
@@ -481,7 +495,7 @@ Graduiertenkolleg Bioinformatik
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning: Recursive Partitioning}
+\frame{\frametitle{Phase 2: Recursive Partitioning}
 
   \begin{block}{Algorithm 2: RecursivePartitioning}
     \begin{minipage}{\textwidth}\footnotesize{
@@ -521,9 +535,9 @@ Graduiertenkolleg Bioinformatik
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning}
+\frame{\frametitle{Remarks}
 
-  Similar to the Centroid-based Quadrisection but...
+  Similar to the Centroid Quadrisection but...
   \begin{itemize}
     \item Alternate \alert{horizontal} and \alert{vertical} partitions
     \item Use probes with fewer embeddings as pivots (``centroids'')
@@ -541,7 +555,7 @@ Graduiertenkolleg Bioinformatik
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning: Results on Random Chips}
+\frame{\frametitle{Results on Random Chips}
 
   \begin{block}{Border Length Minimization (cost: normalized border length)}
     \scriptsize{
@@ -584,7 +598,7 @@ Dim & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning (PP) $\times$ Centroid-based Quadrisection (CQ)}
+\frame{\frametitle{Pivot Partitioning (PP) $\times$ Centroid Quadrisection (CQ)}
 
   \begin{block}{Border Length Minimization}
     \scriptsize{
