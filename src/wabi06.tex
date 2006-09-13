@@ -177,10 +177,8 @@ Graduiertenkolleg Bioinformatik
   \end{columns}
   
   \begin{block}{Border Length Minimization Problem (Hannenhalli et al., 2002)}
-    \begin{itemize}
-      \item Find arrangement (and embeddings) with minimum number of border
-            conflicts
-    \end{itemize}
+    Find arrangement of the probes and embeddings with minimum number of border
+    conflicts over all masks
   \end{block}
 
 }
@@ -201,11 +199,11 @@ Graduiertenkolleg Bioinformatik
         \begin{itemize}
           \item We are more interested in a \alert{per-probe measure}
         \end{itemize}
-        \item Practical considerations need to be taken into account:
+        \item Practical considerations:
         \begin{itemize}
-          \item[a)] Stray light might damage probes that lie as far as \alert{three
-                    cells away} from the targeted spot
-          \item[b)] Imperfections produced \alert{in the middle} of a probe are more
+          \item[a)] Stray light might damage probes as far as \alert{three cells
+                    away} from the targeted spot
+          \item[b)] Imperfections \alert{in the middle} of a probe are more
                     harmful than in its extremities
         \end{itemize}
       \end{itemize}
@@ -229,7 +227,7 @@ Graduiertenkolleg Bioinformatik
   \begin{block}{Conflict Index of a probe $p$}
     \footnotesize{
     \[
-    \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{p'} \delta(p,p',t) \Bigr)
+    \mathcal{C}(p) := \sum_{t=1}^{T} \Bigl( \omega(p,t) \sum_{nbs. p'} \delta(p,p',t) \Bigr)
     \]
     }
   \end{block}
@@ -316,6 +314,20 @@ Graduiertenkolleg Bioinformatik
 
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{New Problem}
+
+  \begin{block}{Conflict Index Minimization Problem}
+    Find placement of the probes and embeddings such that
+    \footnotesize{
+    \[
+    \sum_{p} \mathcal{C}(p) \to \min
+    \]
+    }
+  \end{block}
+
+}
+
 %% *****************************************************************************
 \section[Pivot Partitioning]{Pivot Partitioning Algorithm}
 \subsection{Dummy}
@@ -324,13 +336,10 @@ Graduiertenkolleg Bioinformatik
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Previous Work: Place and Re-embed}
 
+  The problem has been traditionally approached in two phases:
   \begin{itemize}
-    \item The microarray layout problem has been traditionally approached in two
-          phases:
-    \begin{itemize}
-      \item[1)] \alert{Placement} of probes given a fixed embedding
-      \item[2)] \alert{Re-embedding} of probes once a placement is fixed
-    \end{itemize}
+    \item[1)] \alert{Placement} of probes given a fixed embedding
+    \item[2)] \alert{Re-embedding} of probes once a placement is fixed
   \end{itemize}
   
   \begin{block}{Placement: Row-epitaxial (Kahng {\it et~al}., 2003)}
@@ -344,13 +353,13 @@ Graduiertenkolleg Bioinformatik
     \end{itemize}
   \end{block}
 
-  \begin{block}{Re-embedding: several algorithms (Kahng {\it et~al}., 2002, 2003)}
+  \begin{block}{Re-embedding: Sequential (Kahng {\it et~al}., 2003)}
     \begin{itemize}
-      \item All based on the Optimum Single Probe Embedding (OSPE)
+      \item Based on the Optimum Single Probe Embedding (OSPE)
       \begin{itemize}
         \item Re-embed a probe \alert{optimally} in regards to its neighbors
       \end{itemize}
-      \item Difference is the order in which probes are re-embedded
+      \item Spots are re-embedded in a pre-defined order
     \end{itemize}
   \end{block}
   
@@ -365,15 +374,16 @@ Graduiertenkolleg Bioinformatik
       \item We extended it for conflict index minimization
     \end{itemize}
   \end{itemize}
+  
+  \vspace*{0.2cm}
 
   \begin{overprint}
-    
     \onslide<+>
-      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe0.jpg}}
+      \centerline{\includegraphics[width=0.75\textwidth]{pics/ospe0.jpg}}
     \onslide<+>
-      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe1.jpg}}
+      \centerline{\includegraphics[width=0.75\textwidth]{pics/ospe1.jpg}}
     \onslide<+>
-      \centerline{\includegraphics[width=0.8\textwidth]{pics/ospe2.jpg}}
+      \centerline{\includegraphics[width=0.75\textwidth]{pics/ospe2.jpg}}
   \end{overprint}
 
 }
@@ -381,55 +391,71 @@ Graduiertenkolleg Bioinformatik
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Partitioning}
 
-  The placement problem can be trivially \alert{partitioned}
   \begin{itemize}
-    \item The chip is divided into sub-regions; each sub-region gets a sub-set
-          of the probes
-    \item Sub-regions are processed independently, and can be
-          \alert{recursively partitioned}
-    \item In the end, a placement algorithm is needed
-    \item Can reduce run-time and help the placement algorithm
-  \end{itemize}
-
-  \begin{block}{Partitioning: Centroid Quadrisection (Kahng {\it et~al}., 2003)}
+    \item The placement problem can be \alert{partitioned}
     \begin{itemize}
-      \item The chip is divided into \alert{four quadrants}
-      \item Four ``centroids'' are selected maximizing the Hamming distance 
-            between their embeddings
-      \item Remaining probes are compared to the centroids and are assigned to
-            the quadrant whose centroid has the minimum Hamming distance
+      \item Divide the chip into sub-regions; assign sub-sets of probes to each
+            sub-region
+      \item Sub-regions are processed independently, and can be
+            \alert{recursively partitioned}
+      \item A placement algorithm is called on each final sub-region
     \end{itemize}
-  \end{block}
+    \item Partitioning is a compromise but can reduce run-time and help the
+          placement algorithm
+  \end{itemize}
 
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Motivation}
+\frame{\frametitle{Partitioning}
+
+  \begin{block}{Partitioning: Centroid Quadrisection (Kahng {\it et~al}., 2003)}
+    \begin{itemize}
+      \item Heuristically select four probes maximizing the Hamming distance
+            between their embeddings: \alert{centroids}
+      \item Chip is divided into \alert{four quadrants}, each gets one centroid
+      \item Remaining probes $p$ are assigned to the quadrant whose centroid has
+            the minimum Hamming distance to $p$
+    \end{itemize}
+  \end{block}
+  
+  \vspace*{0.5cm}
+  
+  \centerline{\includegraphics[width=0.5\textwidth]{pics/centroid.jpg}}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{What's New?}
+
+  \centerline{\includegraphics[width=0.8\textwidth]{pics/pivots.jpg}}
 
   \begin{block}{Observation 1}
-    \begin{itemize}
-      \item The place and re-embed approach is inefficient
+     \begin{itemize}
+      \item Some probes have only a few possible embeddings
       \begin{itemize}
-        \item Placement is based on embeddings that are likely to change
+        \item Their embeddings cover most cycles of the deposition sequence
+      \end{itemize}
+      \item Others may have up to several million embeddings
+      \begin{itemize}
+        \item Particular embeddings may not serve as good centroids
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Pivot Partitioning}
+    \begin{itemize}
+      \item Restrict the selection of centroids to probes with fewer embeddings:
+            \alert{pivots}
+      \begin{itemize}
+        \item Faster and better selection of centroids
+        \item Probes with more embeddings can more ``easily'' adapt to the
+              pivots
       \end{itemize}
     \end{itemize}
   \end{block}
 
-  \begin{columns}
-  
-    \begin{column}{0.55\textwidth}
-      \begin{block}{Observation 2}
-        \begin{itemize}
-          \item Some probes have only a few possible embeddings
-          \item Others may have up to several millions
-          \item Probes with more embeddings are more ``flexible''
-          \begin{itemize}
-            \item They can adapt better to their neighbors
-          \end{itemize}
-        \end{itemize}
-      \end{block}
-    \end{column}
-    
+  \ignore{    
     \begin{column}{0.45\textwidth}
       \centerline{\footnotesize{
       \begin{tabular}{|r|r|r|}
@@ -448,32 +474,80 @@ Graduiertenkolleg Bioinformatik
        224\,976	& 100.00       &  	      \\ \hline
       \end{tabular}}}
     \end{column}
-  
-  \end{columns}
+  }
     
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{What's New?}
+
+  \begin{block}{Observation 2}
+    \begin{itemize}
+      \item The place and re-embed approach is inefficient
+      \begin{itemize}
+        \item Placement is based on embeddings that are likely to change
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Pivot Partitioning}
+    \begin{itemize}
+      \item Consider \alert{all embeddings} when assigning probes to sub-regions
+            (using OSPE)
+      \begin{itemize}
+        \item Better assignment of probes
+      \end{itemize}
+      \item \alert{Re-embed probes} in regards to the pivots \alert{before
+            placement} (OSPE again)
+      \begin{itemize}
+        \item Improve the ``alignment'' of the embeddings in the region
+      \end{itemize}      
+    \end{itemize}
+  \end{block}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\frametitle{What's New?}
+
+  \begin{block}{Observation 3}
+    \begin{itemize}
+      \item The quadrisection partitioning may force bad assignments in order to
+            ensure squared regions
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Pivot Partitioning}
+    \begin{itemize}
+      \item Alternate \alert{horizontal} and \alert{vertical} partitions
+      \item Allow sub-regions to have different sizes
+      \begin{itemize}
+        \item Greater flexibility when assingning probes to sub-regions
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+
+  \vspace*{0.5cm}
+  
+  \centerline{\includegraphics[width=\textwidth]{pics/pivotpart.jpg}}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ignore{
 \frame{\frametitle{Phase 1: Selecting Pivot Candidates}
 
-  \begin{itemize}
-    \item We use probes with fewer embeddings (\alert{pivots}) to:
-    \begin{itemize}
-      \item Drive the partitioning of the probe set
-      \item Re-embed the probes before their placement
-    \end{itemize}
-  \end{itemize}
-  
   \begin{block}{Algorithm 1: PivotPartitioning}
     \footnotesize{
     \begin{minipage}{\textwidth}
     
     \begin{tabbing}
     Output: \=                                  \kill
-    Input:  \> chip dimensions,
+    Input:  \> a region $R$ of chip,
                set of probes $\mathcal{P} = \{p_{1}, p_{2}, ... p_{n}\}$, and\\
             \> maximum partitioning depth $t_{max}$\\
-    Output: \> placement of the probes $p \in \mathcal{P}$ on the chip
+    Output: \> placement of the probes $p \in \mathcal{P}$ on the region $R$ of
+               the chip
     \end{tabbing}
     
     \vspace*{-.5cm}
@@ -482,19 +556,19 @@ Graduiertenkolleg Bioinformatik
     \item[1.] Select probes $p$ with minimum number of embeddings, $E(p)$:
       \begin{itemize}\footnotesize{
       \item[a)] Let $\mathcal{Q} = \{p \in \mathcal{P} | E(p) \mbox{ is minimal}\}$
-      \item[b)] $\mathcal{P} \leftarrow \mathcal{P} \setminus Q$
+      \item[b)] $\mathcal{P} \leftarrow \mathcal{P} \setminus \mathcal{Q}$
       }
       \end{itemize}
-    \item[2.] Let $R$ be a region consisting of all spots
-    \item[3.] Return RecursivePartitioning (1, $t_{max}$, $R$, $\mathcal{Q}$, $\mathcal{P}$)
+    \item[2.] Return RecursivePartitioning (1, $t_{max}$, $R$, $\mathcal{Q}$, $\mathcal{P}$)
     \end{itemize}
     \end{minipage}
     }
   \end{block}
   
-}
+}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ignore{
 \frame{\frametitle{Phase 2: Recursive Partitioning}
 
   \begin{block}{Algorithm 2: RecursivePartitioning}
@@ -523,8 +597,8 @@ Graduiertenkolleg Bioinformatik
         \item[b)] Let $\mathcal{P}' = \{p \in \mathcal{P} \;|\; c(p,q') < c(p,q'')\}$;
                   $\mathcal{P}'' \leftarrow \mathcal{P} \setminus \mathcal{P}'$
       \end{itemize}
-    \item[4.] Partition $R$ into $R'$ and $R''$ proportionally to
-              $\mathcal{P}' \cup \mathcal{Q}' / \mathcal{P}'' \cup \mathcal{Q}''$
+    \item[4.] Partition $R$ into $R'$, $R''$ proportionally to
+              $\mathcal{P}' \cup \mathcal{Q}'$, $\mathcal{P}'' \cup \mathcal{Q}''$
     \item[5.] Return RecursivePartitioning ($t + 1$, $t_{max}$, $R'$, $\mathcal{Q}'$, $\mathcal{P}$') \\
           $\cup$ RecursivePartitioning ($t + 1$, $t_{max}$, $R''$, $\mathcal{Q}''$, $\mathcal{P}$'')
     \end{itemize}
@@ -532,89 +606,100 @@ Graduiertenkolleg Bioinformatik
     }\end{minipage}
   \end{block}
 
-}
+}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Remarks}
+\frame{\frametitle{Results on Random Chips}
 
-  Similar to the Centroid Quadrisection but...
-  \begin{itemize}
-    \item Alternate \alert{horizontal} and \alert{vertical} partitions
-    \item Use probes with fewer embeddings as pivots (``centroids'')
-    \begin{itemize}
-      \item Faster selection, better representatives
-    \end{itemize}
-    \item First algorithm to combine \alert{placement} and \alert{embedding}
-    \begin{itemize}
-      \item Consider all embeddings when assigning probes to regions
-      \item Re-embed probes optimally in regards to pivots (with OSPE) before
-            the placement
-    \end{itemize}
-  \end{itemize}
+  Using Row-epitaxial for the placement (with $Q = 20\,000$), followed by
+  Sequential re-embedding
 
+  \begin{block}{Border Length Minimization}
+    \scriptsize{
+    \centerline{
+    \begin{tabular}{c|rr|rr|rr|rr}
+& \multicolumn{2}{c|}{$t_{max}=0$} & \multicolumn{2}{c|}{$t_{max}=2$} & \multicolumn{2}{c|}{$t_{max}=4$} & \multicolumn{2}{c}{$t_{max}=6$} \\
+Dim & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c}{Time} \\ \noalign{\smallskip} \hline \noalign{\smallskip}
+100$\times$100 & 42.77 &     34 & 39.19 &     13 & 40.72 &     10 & 42.11 &  11 \\
+200$\times$200 & 41.63 &    429 & 37.30 &    155 & 38.53 &     62 & 40.00 &  85 \\
+300$\times$300 & 41.38 & 1\,174 & 36.12 &    766 & 37.22 &    264 & 38.53 & 139 \\
+500$\times$500 & 41.27 & 3\,524 & 34.69 & 3\,472 & 35.50 & 1\,996 & 36.58 & 713 \\
+    \end{tabular}}
+    }
+  \end{block}
+  
+  \scriptsize{
+    $t_{max}$: maximum partitioning depth \\
+    Dim: chip dimension \\
+    Cost: \alert{normalized border length} \\
+    Time: running time in seconds
+  }
+  
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{\frametitle{Results on Random Chips}
 
-  \begin{block}{Border Length Minimization (cost: normalized border length)}
+  Using Row-epitaxial for the placement (with $Q = 2\,000$), followed by
+  Sequential re-embedding
+
+  \begin{block}{Conflict Index minimization}
     \scriptsize{
     \centerline{
     \begin{tabular}{c|rr|rr|rr|rr}
 & \multicolumn{2}{c|}{$t_{max}=0$} & \multicolumn{2}{c|}{$t_{max}=2$} & \multicolumn{2}{c|}{$t_{max}=4$} & \multicolumn{2}{c}{$t_{max}=6$} \\
-Dim & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c}{Time} \\
-\noalign{\smallskip} \hline \noalign{\smallskip}
-100 & 42.77 &     34 & 39.19 &     13 & 40.72 &     10 & 42.11 &  11 \\
-200 & 41.63 &    429 & 37.30 &    155 & 38.53 &     62 & 40.00 &  85 \\
-300 & 41.38 & 1\,174 & 36.12 &    766 & 37.22 &    264 & 38.53 & 139 \\
-500 & 41.27 & 3\,524 & 34.69 & 3\,472 & 35.50 & 1\,996 & 36.58 & 713 \\
-    \noalign{\smallskip}
+Dim & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c}{Time} \\ \noalign{\smallskip} \hline \noalign{\smallskip}
+100$\times$100 & 514.49 &     45 & 453.67 &     37 & 467.78 &     19 & 475.44 &     15 \\
+200$\times$200 & 517.07 &    192 & 466.22 &    215 & 452.41 &    166 & 462.55 &     99 \\
+300$\times$300 & 518.51 &    438 & 475.84 &    524 & 452.00 &    466 & 448.17 &    336 \\
+500$\times$500 & 517.50 & 1\,471 & 481.36 & 1\,530 & 462.33 & 1\,472 & 445.43 & 1\,295 \\
     \end{tabular}}
     }
   \end{block}
 
-  \begin{block}{Conflict Index minimization (cost: average conflict index)}
-    \scriptsize{
-    \centerline{
-    \begin{tabular}{c|rr|rr|rr|rr}
-& \multicolumn{2}{c|}{$t_{max}=0$} & \multicolumn{2}{c|}{$t_{max}=2$} & \multicolumn{2}{c|}{$t_{max}=4$} & \multicolumn{2}{c}{$t_{max}=6$} \\
-Dim & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c|}{Time} & \multicolumn{1}{c}{Cost} & \multicolumn{1}{c}{Time} \\
-\noalign{\smallskip} \hline \noalign{\smallskip}
-100 & 514.49 &     45 & 453.67 &     37 & 467.78 &     19 & 475.44 &     15 \\
-200 & 517.07 &    192 & 466.22 &    215 & 452.41 &    166 & 462.55 &     99 \\
-300 & 518.51 &    438 & 475.84 &    524 & 452.00 &    466 & 448.17 &    336 \\
-500 & 517.50 & 1\,471 & 481.36 & 1\,530 & 462.33 & 1\,472 & 445.43 & 1\,295 \\
-    \noalign{\smallskip}
-    \end{tabular}}
-    }
-  \end{block}
-
-  \ignore{
   \scriptsize{
-    Row-epitaxial is used for the placement (with $Q = 20\,000$), followed by
-    Sequential re-embedding; running times reported in seconds.
+    $t_{max}$: maximum partitioning depth \\
+    Dim: chip dimension \\
+    Cost: \alert{average conflict index} \\
+    Time: running time in seconds
   }
-  }
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{\frametitle{Pivot Partitioning (PP) $\times$ Centroid Quadrisection (CQ)}
+\frame{\frametitle{Pivot Partitioning vs. Centroid Quadrisection}
+
+  Using Row-epitaxial for the placement (with $Q = 20\,000$), followed by
+  Sequential re-embedding
 
   \begin{block}{Border Length Minimization}
     \scriptsize{
     \centerline{
     \begin{tabular}{c|rr|rr|rr}
 & \multicolumn{1}{|c}{$L=1$} & \multicolumn{1}{c}{$t_{max}=2$} & \multicolumn{1}{|c}{$L=2$} & \multicolumn{1}{c}{$t_{max}=4$} & \multicolumn{1}{|c}{$L=3$} & \multicolumn{1}{c}{$t_{max}=6$} \\
-Dim & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} \\
-\noalign{\smallskip} \hline \noalign{\smallskip}
-100 &    393\,218 & 0.18\% &    399\,312 & -1.89\% &    410\,608 & -2.48\% \\
-200 & 1\,524\,803 & 2.27\% & 1\,545\,825 &  0.48\% & 1\,573\,096 & -1.34\% \\
-300 & 3\,493\,552 & 7.12\% & 3\,413\,316 &  2.05\% & 3\,434\,964 & -0.61\% \\
-500 & 9\,546\,351 & 8.95\% & 9\,355\,231 &  4.67\% & 9\,307\,510 &  1.03\% \\
-    \noalign{\smallskip}
+Dim & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} \\ \noalign{\smallskip} \hline \noalign{\smallskip}
+100$\times$100 &    393\,218 & \color{green!85!black} 0.18\% &    399\,312 & \color{red}           -1.89\% &    410\,608 & \color{red}            -2.48\% \\
+200$\times$200 & 1\,524\,803 & \color{green!85!black} 2.27\% & 1\,545\,825 & \color{green!85!black} 0.48\% & 1\,573\,096 & \color{red}            -1.34\% \\
+300$\times$300 & 3\,493\,552 & \color{green!85!black} 7.12\% & 3\,413\,316 & \color{green!85!black} 2.05\% & 3\,434\,964 & \color{red}            -0.61\% \\
+500$\times$500 & 9\,546\,351 & \color{green!85!black} 8.95\% & 9\,355\,231 & \color{green!85!black} 4.67\% & 9\,307\,510 & \color{green!85!black}  1.03\% \\
     \end{tabular}}
     }
   \end{block}
+
+  \scriptsize{
+    $L$: maximum partitioning depth of Centroid Quadrisection (CQ) \\
+    $t_{max}$: maximum partitioning depth of Pivot Partitioning (PP) \\
+    Dim: chip dimension \\
+    Cost: \alert{normalized border length} \\
+  }
+  
+  \vspace*{0.5cm}
+  
+  \begin{itemize}
+    \item CQ's ``borrowing heuristic'' may explain why it performs better on
+          small chips and deeper partitioning levels
+    \item Running times are in the same order of magnitude (not shown)
+  \end{itemize}
 
 }
 
@@ -627,55 +712,51 @@ Dim & \multicolumn{1}{|c}{CQ} & \multicolumn{1}{c}{PP} & \multicolumn{1}{|c}{CQ}
 \frame{\frametitle{Summary}
 
   \begin{itemize}
-    \item \alert{Conflict Index}: new model for evaluating microarray layouts
-    \item \alert{Pivot Partitioning}: new partitioning algorithm
+    \item \alert{Conflict Index}
     \begin{itemize}
-      \item Faster and better selection of pivots
-      \item Improved assignment of probes to regions
-      \item First to combine placement and re-embedding
+      \item New model for evaluating microarray layouts
     \end{itemize}
-    
-    \vskip0pt plus.5fill
-
-    \ignore{    
+    \item \alert{Pivot Partitioning}
+    \begin{itemize}
+      \item First algorithm to combine placement and re-embedding
+      \item Improved assignment of probes to regions
+      \item Up to 8.95\% reduction of conflicts compared to existing algorithms
+            with comparable running times
+    \end{itemize}    
+  \end{itemize}
+  
+  \vspace*{0.3cm}
+  \begin{itemize}
     \item Future work
     \begin{itemize}
-      \item Implement ``borrowing heuristic''
+      \item Implement ``borrowing heuristic'' for Pivot Partitioning
     \end{itemize}
-    }
-    
   \end{itemize}
 
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Thanks!}
+\frame{\frametitle{Auf Wiedersehen!}
 
-  \centerline{
-    \includegraphics[height=1.4cm]{pics/aggi_logo.png}
-    \hspace*{0.6cm}
-    \includegraphics[height=1.4cm]{pics/gsbg_logo.png}
-  }
+  \begin{block}{To appear...}
+    \begin{itemize}
+      \item Microarray Layout as a Quadratic Assignment Problem, German
+            Conference on Bioinformatics (GCB 2006), LNI.
+      \item New placement algorithm under development...
+    \end{itemize}
+  \end{block}
 
-  \begin{itemize}
-    \item Prof. Dr. Jens Stoye
-    \item Prof. Dr. Robert Giegerich
-    \item AG Genominformatik
-    \item Graduiertenkolleg Bioinformatik
-    \item Graduate School in Bioinformatics and Genome Research
-    
-    \vskip0pt plus.5fill
-    
-    \item ...and \alert{thank you} for your attention!
-    
-  \end{itemize}
-  
   \begin{block}{More info on}
     \centerline{\tt\alert{
       http://gi.cebitec.uni-bielefeld.de/assb/chiplayout
     }}
   \end{block}
+
+  \begin{itemize}
+    \item Thanks to Ion Mandoiu, Xu Xu and Sherif Reda
+    \item And \alert{thank you} for your attention!
+  \end{itemize}
   
-\end{frame}
+}
 
 \end{document}

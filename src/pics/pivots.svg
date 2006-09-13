@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="D:\Cebitec\talks\2006\0913 - WABI\wabi06talk\src\pics"
+   sodipodi:docname="pivots.svg"
+   inkscape:export-filename="D:\Cebitec\talks\2006\0913 - WABI\wabi06talk\src\pics\pivots.png"
+   inkscape:export-xdpi="299.93134"
+   inkscape:export-ydpi="299.93134">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3224">
+      <stop
+         style="stop-color:black;stop-opacity:1;"
+         offset="0"
+         id="stop3226" />
+      <stop
+         id="stop3236"
+         offset="0.19642857"
+         style="stop-color:#7f0000;stop-opacity:1;" />
+      <stop
+         id="stop3232"
+         offset="0.5"
+         style="stop-color:red;stop-opacity:1;" />
+      <stop
+         style="stop-color:#7f0000;stop-opacity:1;"
+         offset="0.8035714"
+         id="stop3234" />
+      <stop
+         style="stop-color:black;stop-opacity:1;"
+         offset="1"
+         id="stop3228" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="410.26406"
+     inkscape:cy="864.60989"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1024"
+     inkscape:window-height="712"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:36px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Lucida Console"
+       x="9.7890625"
+       y="35.817261"
+       id="text6654"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan6656"
+         x="9.7890625"
+         y="35.817261"
+         style="fill:black;fill-opacity:1">ACGTACGTACGTACGTACGTACGTACGT</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:36.17574692px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Lucida Console"
+       x="6.2419925"
+       y="68.818283"
+       id="text3800"
+       sodipodi:linespacing="100%"
+       transform="scale(1.004882,0.995142)"><tspan
+         sodipodi:role="line"
+         id="tspan3802"
+         x="6.2419925"
+         y="68.818283"
+         style="fill:#0080ff;fill-opacity:1">--G--C--A---A--T--G--C--A-G-</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:36.08457565px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:red;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Lucida Console"
+       x="9.7651377"
+       y="101.38821"
+       id="text3804"
+       sodipodi:linespacing="100%"
+       transform="scale(1.002349,0.997657)"><tspan
+         sodipodi:role="line"
+         id="tspan3806"
+         x="9.7651377"
+         y="101.38821"
+         style="fill:red;fill-opacity:1">AC-TA-G-ACG-A---------------</tspan></text>
+  </g>
+</svg>
